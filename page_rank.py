@@ -48,8 +48,10 @@ ev1 = V[near(D, 1.0)]
 print(ev1)
 
 sorted_indices = ev1.argsort()[::-1]
-print(sorted_indices)	
-print(np.array(subjects)[sorted_indices])
+print(sorted_indices)
+final_rating = np.array(subjects)[sorted_indices]
+final_rating_as_string = ', '.join(final_rating[0].tolist())	
+print(f"Final rating: {final_rating_as_string}")
 
 #ev1 = np.array([2, 1, 2])
 #sorted_indices = ev1.argsort()[::-1]
