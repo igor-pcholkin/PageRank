@@ -1,7 +1,9 @@
-# This application shows how page rank algorythm can be used to create a rating of artists based on their influences
+# This application shows how page rank algorythm can be used to create a rating of artists based on how they influenced
+# other groups
 
 from page_rank import createRating, toMap1
 
+# each line here shows artist and groups which influenced it
 theBeatlesLikes = toMap1([ "The Everly Brothers", "Chuck Berry", "Buddy Holly", "Little Richard", "Elvis Presley"])
 pinkFloysLikes = toMap1([ "The Rolling Stones", "The Beatles", "Cream", "The Velvet Underground", "Syd Barrett" ])
 smithsLikes = toMap1([ "The Velvet Underground", "The New York Dolls", "Roxy Music", "T. Rex", "David Bowie" ])
@@ -13,6 +15,11 @@ canLikes = toMap1([ "The Velvet Underground", "Frank Zappa", "The Mothers of Inv
 remLikes = toMap1([ "The Byrds", "The Velvet Underground", "Patti Smith", "Big Star", "Television" ])
 davidBowieLikes = toMap1([ "The Velvet Underground", "The Beatles", "Little Richard", "Elvis Presley", "The Kinks" ])
 
+# rowLikeCapacity should be set to the value such that sum of all "likes" influencing specific subject 
+# (i.e. group in this # case) should be equal 1.
+# In all the declarations above all influencing groups receive an equal influencing score 1 which is then divided by
+# rowLikeCapacity (inside createRating()) to receive an absolute influencing score 0.2 (1/rowLikeCapacity = 0.2).
+# Sum of all "likes" of each group is equal to 1 because 0.2 * 5 = 1 ( where 5 is a total number of influencing groups)
 rowLikeCapacity = 5
 
 totalLikes = { "The Beatles": theBeatlesLikes, "Pink Floyd": pinkFloysLikes, "The Smiths": smithsLikes,
@@ -23,4 +30,5 @@ rating = createRating(totalLikes, rowLikeCapacity)
 
 print("Rating is: " + str(rating))
 
+# The most influencial groups go first in the rating
 assert rating == ['The Velvet Underground', 'The Beatles', 'Elvis Presley', 'Little Richard', 'Karlheinz Stockhausen', 'Roxy Music', 'David Bowie', 'Brian Eno', 'Buddy Holly', 'Chuck Berry', 'The Everly Brothers', 'The Kinks', 'The Beach Boys', 'Neu!', 'Big Star', 'Cabaret Voltaire', 'Kraftwerk', 'Thelonious Monk', 'Syd Barrett', 'Patti Smith', 'T. Rex', 'Tangerine Dream', 'Charlie Parker', 'Television', 'The Byrds', 'The Mothers of Invention', 'John Coltrane', 'Frank Zappa', 'The New York Dolls', 'Duke Ellington', 'Dizzy Gillespie', 'The Rolling Stones', 'Cream', 'Parliament-Funkadelic', 'Aphex Twin', 'Miles Davis', 'Can', 'Pink Floyd', 'R.E.M.', 'Talking Heads', 'The Smiths']
