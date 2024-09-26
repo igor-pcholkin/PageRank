@@ -4,16 +4,16 @@
 from page_rank import createRating, toMap1
 
 # each line here shows artist and groups which influenced it
-theBeatlesLikes = toMap1([ "The Everly Brothers", "Chuck Berry", "Buddy Holly", "Little Richard", "Elvis Presley"])
-pinkFloysLikes = toMap1([ "The Rolling Stones", "The Beatles", "Cream", "The Velvet Underground", "Syd Barrett" ])
-smithsLikes = toMap1([ "The Velvet Underground", "The New York Dolls", "Roxy Music", "T. Rex", "David Bowie" ])
-talkingHeadsLikes = toMap1([ "The Velvet Underground", "Roxy Music", "David Bowie", "Brian Eno", "Parliament-Funkadelic" ])
-milesDavisLikes = toMap1([ "Duke Ellington", "Charlie Parker", "Dizzy Gillespie", "John Coltrane", "Thelonious Monk" ])
-aphexTwinsLikes = toMap1([ "Brian Eno", "Kraftwerk", "Karlheinz Stockhausen", "Tangerine Dream", "Cabaret Voltaire" ])
-kraftwerkLikes = toMap1([ "The Beach Boys", "The Velvet Underground", "The Beatles", "Karlheinz Stockhausen", "Neu!" ])
-canLikes = toMap1([ "The Velvet Underground", "Frank Zappa", "The Mothers of Invention", "Karlheinz Stockhausen", "The Beatles" ])
-remLikes = toMap1([ "The Byrds", "The Velvet Underground", "Patti Smith", "Big Star", "Television" ])
-davidBowieLikes = toMap1([ "The Velvet Underground", "The Beatles", "Little Richard", "Elvis Presley", "The Kinks" ])
+theBeatlesLikes = [ "The Everly Brothers", "Chuck Berry", "Buddy Holly", "Little Richard", "Elvis Presley"]
+pinkFloysLikes = [ "The Rolling Stones", "The Beatles", "Cream", "The Velvet Underground", "Syd Barrett" ]
+smithsLikes = [ "The Velvet Underground", "The New York Dolls", "Roxy Music", "T. Rex", "David Bowie" ]
+talkingHeadsLikes = [ "The Velvet Underground", "Roxy Music", "David Bowie", "Brian Eno", "Parliament-Funkadelic" ]
+milesDavisLikes = [ "Duke Ellington", "Charlie Parker", "Dizzy Gillespie", "John Coltrane", "Thelonious Monk" ]
+aphexTwinsLikes = [ "Brian Eno", "Kraftwerk", "Karlheinz Stockhausen", "Tangerine Dream", "Cabaret Voltaire" ]
+kraftwerkLikes = [ "The Beach Boys", "The Velvet Underground", "The Beatles", "Karlheinz Stockhausen", "Neu!" ]
+canLikes = [ "The Velvet Underground", "Frank Zappa", "The Mothers of Invention", "Karlheinz Stockhausen", "The Beatles" ]
+remLikes = [ "The Byrds", "The Velvet Underground", "Patti Smith", "Big Star", "Television" ]
+davidBowieLikes = [ "The Velvet Underground", "The Beatles", "Little Richard", "Elvis Presley", "The Kinks" ]
 
 # rowLikeCapacity should be set to the value such that sum of all "likes" influencing specific subject 
 # (i.e. group in this # case) should be equal 1.
@@ -25,6 +25,9 @@ rowLikeCapacity = 5
 totalLikes = { "The Beatles": theBeatlesLikes, "Pink Floyd": pinkFloysLikes, "The Smiths": smithsLikes,
 "Talking Heads": talkingHeadsLikes, "Miles Davis": milesDavisLikes, "Aphex Twin": aphexTwinsLikes,
 "Kraftwerk": kraftwerkLikes, "Can": canLikes, "R.E.M.": remLikes, "David Bowie": davidBowieLikes }
+
+for key in totalLikes:
+	totalLikes[key] = toMap1(totalLikes[key])
 
 rating = createRating(totalLikes, rowLikeCapacity)
 
