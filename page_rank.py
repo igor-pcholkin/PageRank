@@ -10,11 +10,6 @@ def createRating(totalLikes):
 	
 	return finalRating
 
-# needed to find value which is "close enough" to target value
-# to find eigen vector corresponding to eigen value 1
-def near(a, b, rtol = 1e-5, atol = 1e-8):
-    return np.abs(a-b)<(atol+rtol*np.abs(b))
-
 def getSubjects(totalLikes):
 	subjectsMap = {}
 	
@@ -96,7 +91,12 @@ def eigenVectorForEigenValue1(transitionMatrix):
 	print(f"Abs eigen vector for eigen value 1: {absev1}\n")	
 	
 	return absev1
-	
+
+# needed to find value which is "close enough" to target value
+# to find eigen vector corresponding to eigen value 1
+def near(a, b, rtol = 1e-5, atol = 1e-8):
+    return np.abs(a-b)<(atol+rtol*np.abs(b))
+
 def getFinalRating(subjects, ev1):
 	sorted_indices = ev1.argsort()[::-1]
 	print(f"Sorted indices of subjects (desc): {sorted_indices}\n")
