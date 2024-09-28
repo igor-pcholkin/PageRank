@@ -1,15 +1,23 @@
 import numpy as np
 import numpy.linalg as linalg
 
+def createRating(totalLikes):
+	subjects = getSubjects(totalLikes)
+	subjectToIndexMap = getSubjectToIndexMap(subjects)
+	transitionMatrix = getTransitionMatrix(subjects, subjectToIndexMap, totalLikes)
+	ev1 = eigenVectorForEigenValue1(transitionMatrix)
+	finalRating = getFinalRating(subjects, ev1)
+	
+	return finalRating
+
 # needed to find value which is "close enough" to target value
 # to find eigen vector corresponding to eigen value 1
 def near(a, b, rtol = 1e-5, atol = 1e-8):
     return np.abs(a-b)<(atol+rtol*np.abs(b))
 
-def createRating(totalLikes, rowLikeCapacity):
-# TODO:need to ensure that sum(values) of each xLikes = rowLikeCapacity
+def getSubjects(totalLikes):
 	subjectsMap = {}
-
+	
 	for subject in totalLikes.keys():
 		subjectsMap[subject] = 0
 
@@ -20,66 +28,90 @@ def createRating(totalLikes, rowLikeCapacity):
 	subjects = list(subjectsMap)
 	subjects.sort()	
 
+	print(f"Subjects: {str(subjects)}\n")		
+	return subjects
+	
+def getSubjectToIndexMap(subjects):
+	subjectToIndexMap = {}
+
 	# create indexes of each subject
 	for i in range(len(subjects)):
-		subjectsMap[subjects[i]] = i	
+		subjectToIndexMap[subjects[i]] = i
+			
+	return subjectToIndexMap
 	
-	print(f"Subjects: {str(subjects)}\n")		
+def getTransitionMatrix(subjects, subjectToIndexMap, totalLikes):	
+	maxRowLikeCapacity = getMaxRowLikeCapacity(totalLikes)
 
-	likesMat = np.zeros((len(subjects), len(subjects)))
+	transitionMatrix = np.zeros((len(subjects), len(subjects)))
 
 	for fromSubject in totalLikes.keys():
-		fromSubjectIdx = subjectsMap[fromSubject] 
+		fromSubjectIdx = subjectToIndexMap[fromSubject] 
 		fromSubjectLikes = totalLikes[fromSubject]
 		for toSubject in fromSubjectLikes.keys():
-			toSubjectIndex = subjectsMap[toSubject]
+			toSubjectIndex = subjectToIndexMap[toSubject]
 			toSubjectValue = fromSubjectLikes[toSubject]
-			#print(f"Setting likesMat[{toSubjectIndex}, {fromSubjectIdx}] to {toSubjectValue / rowLikeCapacity}")
-			likesMat[toSubjectIndex, fromSubjectIdx] = toSubjectValue / rowLikeCapacity
+			transitionMatrix[toSubjectIndex, fromSubjectIdx] = toSubjectValue / maxRowLikeCapacity
 
-	eliminateDeadEndNodes(likesMat, len(subjects))
+	eliminateDeadEndNodes(transitionMatrix, len(subjects))
 
-	print(f"Transition matrix:\n{likesMat}\n")
+	print(f"Transition matrix:\n{transitionMatrix}\n")
+	return transitionMatrix
 
-	D, V = linalg.eig(likesMat)
-	V = V.T
+# rowLikeCapacity is a sum of all "likes" from a specific subject
+# it should be the same value for all subjects
+def getMaxRowLikeCapacity(totalLikes):
+	maxRowLikeCapacity = 0
 
-	ev1 = V[near(D, 1.0)][0]
-	print(f"Eigen vector for eigen value 1: {ev1}\n")
-	ev1 = abs(ev1)
-	print(f"Abs eigen vector for eigen value 1: {ev1}\n")
+	for fromSubject in totalLikes.keys():
+		fromSubjectLikes = totalLikes[fromSubject]
+		rowLikeCapacity = sum(fromSubjectLikes.values())
+		if maxRowLikeCapacity == 0:
+			maxRowLikeCapacity = rowLikeCapacity
+		else:
+			if rowLikeCapacity != maxRowLikeCapacity:
+				print(f"Warning: row like capacity ({rowLikeCapacity}) < max row like capacity ({maxRowLikeCapacity}) for subject: {fromSubject}")
+				return -1				
+				
+	print(f"max row capacity is: {maxRowLikeCapacity}")
+	return maxRowLikeCapacity
 
-	sorted_indices = ev1.argsort()[::-1]
-	print(f"Sorted indices of subjects (desc): {sorted_indices}\n")
-	final_rating = np.array(subjects)[[sorted_indices]]
-	
-	return final_rating[0].tolist()
-	#final_rating_as_string = ', '.join(final_rating[0].tolist())	
-	#print(f"Final rating: {final_rating_as_string}")
-
-	#ev1 = np.array([2, 1, 2])
-	#sorted_indices = ev1.argsort()[::-1]
-	#print(sorted_indices)
-
-	#ev1 = np.array([3, 2, -4, 0, 1, -9])
-	#sorted_indices = ev1.argsort()[::-1]
-	#print(sorted_indices)
-
-def eliminateDeadEndNodes(likesMat, matWidthHeight):
+def eliminateDeadEndNodes(transitionMatrix, matWidthHeight):
 	v = 1 / matWidthHeight
 	for i in range(matWidthHeight):
-		column = likesMat[:,i]
+		column = transitionMatrix[:,i]
 		all_zeros = not np.any(column)
 		if all_zeros:
 			for j in range(matWidthHeight):
 				column[j] = v
 
+def eigenVectorForEigenValue1(transitionMatrix):
+	D, V = linalg.eig(transitionMatrix)
+	V = V.T
+
+	ev1 = V[near(D, 1.0)][0]
+	print(f"Eigen vector for eigen value 1: {ev1}\n")
+	
+	absev1 = abs(ev1)
+	print(f"Abs eigen vector for eigen value 1: {absev1}\n")	
+	
+	return absev1
+	
+def getFinalRating(subjects, ev1):
+	sorted_indices = ev1.argsort()[::-1]
+	print(f"Sorted indices of subjects (desc): {sorted_indices}\n")
+	
+	final_rating = np.array(subjects)[[sorted_indices]]
+	return final_rating[0].tolist()	
+
+# assign value likes to all subjects in array
 def toMap(arr, value):
 	map = {}
 	for a in arr:
 		map[a] = value
 	return map		
-	
+
+# assign 1 like to all subjects in array	
 def toMap1(arr):
 	return toMap(arr, 1)			
 	

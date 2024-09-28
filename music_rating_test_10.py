@@ -15,21 +15,16 @@ canLikes = [ "The Velvet Underground", "Frank Zappa", "The Mothers of Invention"
 remLikes = [ "The Byrds", "The Velvet Underground", "Patti Smith", "Big Star", "Television" ]
 davidBowieLikes = [ "The Velvet Underground", "The Beatles", "Little Richard", "Elvis Presley", "The Kinks" ]
 
-# rowLikeCapacity should be set to the value such that sum of all "likes" influencing specific subject 
-# (i.e. group in this # case) should be equal 1.
-# In all the declarations above all influencing groups receive an equal influencing score 1 which is then divided by
-# rowLikeCapacity (inside createRating()) to receive an absolute influencing score 0.2 (1/rowLikeCapacity = 0.2).
-# Sum of all "likes" of each group is equal to 1 because 0.2 * 5 = 1 ( where 5 is a total number of influencing groups)
-rowLikeCapacity = 5
-
 totalLikes = { "The Beatles": theBeatlesLikes, "Pink Floyd": pinkFloysLikes, "The Smiths": smithsLikes,
 "Talking Heads": talkingHeadsLikes, "Miles Davis": milesDavisLikes, "Aphex Twin": aphexTwinsLikes,
 "Kraftwerk": kraftwerkLikes, "Can": canLikes, "R.E.M.": remLikes, "David Bowie": davidBowieLikes }
 
-for key in totalLikes:
-	totalLikes[key] = toMap1(totalLikes[key])
+# assign one like to each influencing group
+for group in totalLikes:
+	influencingGroups = totalLikes[group]
+	totalLikes[group] = toMap1(influencingGroups)
 
-rating = createRating(totalLikes, rowLikeCapacity)
+rating = createRating(totalLikes)
 
 print("Rating is: " + str(rating))
 
