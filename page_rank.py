@@ -56,22 +56,27 @@ def getSubjectToIndexMap(subjects):
 	return subjectToIndexMap
 	
 def getTransitionMatrix(subjects, subjectToIndexMap, totalLikes):	
-	maxRowLikeCapacity = getMaxRowLikeCapacity(totalLikes)
+	# maxRowLikeCapacity = getMaxRowLikeCapacity(totalLikes)
 
 	transitionMatrix = np.zeros((len(subjects), len(subjects)))
 
 	for fromSubject in totalLikes.keys():
 		fromSubjectIdx = subjectToIndexMap[fromSubject] 
 		fromSubjectLikes = totalLikes[fromSubject]
+		rowCapacity = getRowCapacity(totalLikes, fromSubject)
 		for toSubject in fromSubjectLikes.keys():
 			toSubjectIndex = subjectToIndexMap[toSubject]
 			toSubjectValue = fromSubjectLikes[toSubject]
-			transitionMatrix[toSubjectIndex, fromSubjectIdx] = toSubjectValue / maxRowLikeCapacity
+			transitionMatrix[toSubjectIndex, fromSubjectIdx] = toSubjectValue / rowCapacity
 
 	eliminateDeadEndNodes(transitionMatrix, len(subjects))
 
 	print(f"Transition matrix:\n{transitionMatrix}\n")
 	return transitionMatrix
+
+def getRowCapacity(totalLikes, fromSubject):
+		fromSubjectLikes = totalLikes[fromSubject]
+		return sum(fromSubjectLikes.values())
 
 # rowLikeCapacity is a sum of all "likes" from a specific subject
 # it should be the same value for all subjects
@@ -79,8 +84,7 @@ def getMaxRowLikeCapacity(totalLikes):
 	maxRowLikeCapacity = 0
 
 	for fromSubject in totalLikes.keys():
-		fromSubjectLikes = totalLikes[fromSubject]
-		rowLikeCapacity = sum(fromSubjectLikes.values())
+		rowLikeCapacity = getRowCapacity(totalLikes, fromSubject)
 		if maxRowLikeCapacity == 0:
 			maxRowLikeCapacity = rowLikeCapacity
 		else:
