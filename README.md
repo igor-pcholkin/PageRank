@@ -24,8 +24,8 @@ rating = pr.createRating()
 ```
 
 ## Notes
-Beware of the message "Warning: row like capacity < max row like capacity" - more likely the rating will be calculated incorrectly with it.
-Also ensure that eigen values are randomly distributed within 0..1 interval, they should not be too low.
+Check console outputs, ensure that eigen values are randomly distributed within 0..1 interval, they should not be too low.
+Otherwise more likely the rating will be calculated incorrectly with it.
 
 ## Examples
 `music_rating_*.py` - example applications that calculate the ranking of music artists based on how often they have influenced other artists.
