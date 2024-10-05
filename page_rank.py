@@ -1,6 +1,26 @@
 import numpy as np
 import numpy.linalg as linalg
 
+class PageRank:
+	totalLikes = {}
+	
+	def add(self, fromS, to, likes):
+		likesTo = self.totalLikes.get(fromS)
+		if likesTo == None:
+			likesTo = {}
+			self.totalLikes[fromS] = likesTo
+		likesTo[to] = likes
+		
+	def addAll1(self, fromS, allTo):
+		for to in allTo:
+			self.add1(fromS, to)	
+		
+	def add1(self, fromS, to):
+		self.add(fromS, to, 1)	
+
+	def createRating(self):
+		return createRating(self.totalLikes)
+
 def createRating(totalLikes):
 	subjects = getSubjects(totalLikes)
 	subjectToIndexMap = getSubjectToIndexMap(subjects)
