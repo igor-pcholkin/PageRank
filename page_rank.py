@@ -71,8 +71,17 @@ def getTransitionMatrix(subjects, subjectToIndexMap, totalLikes):
 
 	eliminateDeadEndNodes(transitionMatrix, len(subjects))
 
-	print(f"Transition matrix:\n{transitionMatrix}\n")
+	print(f"Transition matrix without teleports:\n{transitionMatrix}\n")
+	transitionMatrix = addTeleports(transitionMatrix, len(subjects))
+
+	print(f"Transition matrix with teleports:\n{transitionMatrix}\n")
 	return transitionMatrix
+
+# https://towardsdatascience.com/large-graph-analysis-with-pagerank-e571e3dec8ed
+def addTeleports(transitionMatrix, matWidthHeight):
+	dumpingFactor = 0.9
+	telMatrix =  np.full((matWidthHeight, matWidthHeight), (1 - dumpingFactor) / matWidthHeight)
+	return transitionMatrix * dumpingFactor + telMatrix
 
 def getRowCapacity(totalLikes, fromSubject):
 		fromSubjectLikes = totalLikes[fromSubject]

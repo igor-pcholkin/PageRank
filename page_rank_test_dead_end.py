@@ -10,4 +10,4 @@ totalLikes = { "A": aLikes, "B": bLikes, "C": cLikes }
 
 rating = createRating(totalLikes)
 print("Rating is: " + str(rating))
-assert rating == ["A", "C", "D", "B"]
+assert rating == ["A", "C", "B", "D"]
