@@ -4,7 +4,10 @@ import numpy.linalg as linalg
 class PageRank():
 
 	def __init__(self, min = 0, max = 0):
-		self.default = (max - min + 1) / 2
+		if min == 0 and max == 0:
+			self.default = 0
+		else:	
+			self.default = (max - min + 1) / 2
 
 	totalLikes = {}
 	
