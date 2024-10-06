@@ -11,7 +11,10 @@ pr.add("Person3", "Person2", 5)
 pr.add("Person4", "Person3", 5)
 pr.add("Person3", "Person1", 5)
 
-print("Rating is: " + str(pr.createRating()))
+rating = pr.createRating()
+
+print("Rating is: " + str(rating))
+assert rating == ['Person2', 'Person3', 'Person1', 'Person4']
 
 # negative likes
 # NegativePerson1 and NegativePerson2 try to udermine rating of Person2
@@ -19,6 +22,9 @@ print("Rating is: " + str(pr.createRating()))
 pr.add("NegativePerson1", "Person2", 1)
 pr.add("NegativePerson2", "Person2", 1)
 
-print("Rating is: " + str(pr.createRating()))
+rating = pr.createRating()
+
+print("Rating is: " + str(rating))
+assert rating == ['Person2', 'Person3', 'Person1', 'Person4', 'NegativePerson2', 'NegativePerson1']
 
 
