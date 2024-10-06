@@ -1,7 +1,11 @@
 import numpy as np
 import numpy.linalg as linalg
 
-class PageRank:
+class PageRank():
+
+	def __init__(self, min = 0, max = 0):
+		self.default = (max + min) / 2
+
 	totalLikes = {}
 	
 	def add(self, fromS, to, likes):
@@ -19,12 +23,12 @@ class PageRank:
 		self.add(fromS, to, 1)	
 
 	def createRating(self):
-		return createRating(self.totalLikes)
+		return createRating(self.totalLikes, self.default)
 
-def createRating(totalLikes):
+def createRating(totalLikes, default = 0):
 	subjects = getSubjects(totalLikes)
 	subjectToIndexMap = getSubjectToIndexMap(subjects)
-	transitionMatrix = getTransitionMatrix(subjects, subjectToIndexMap, totalLikes)
+	transitionMatrix = getTransitionMatrix(subjects, subjectToIndexMap, totalLikes, default)
 	ev1 = eigenVectorForEigenValue1(transitionMatrix)
 	finalRating = getFinalRating(subjects, ev1)
 	
@@ -55,19 +59,19 @@ def getSubjectToIndexMap(subjects):
 			
 	return subjectToIndexMap
 	
-def getTransitionMatrix(subjects, subjectToIndexMap, totalLikes):	
-	# maxRowLikeCapacity = getMaxRowLikeCapacity(totalLikes)
-
+def getTransitionMatrix(subjects, subjectToIndexMap, totalLikes, default):	
 	transitionMatrix = np.zeros((len(subjects), len(subjects)))
 
 	for fromSubject in totalLikes.keys():
 		fromSubjectIdx = subjectToIndexMap[fromSubject] 
 		fromSubjectLikes = totalLikes[fromSubject]
-		rowCapacity = getRowCapacity(totalLikes, fromSubject)
-		for toSubject in fromSubjectLikes.keys():
+		fromCapacity = getFromCapacity(totalLikes, fromSubject, len(subjects), default)
+		for toSubject in subjects:
 			toSubjectIndex = subjectToIndexMap[toSubject]
-			toSubjectValue = fromSubjectLikes[toSubject]
-			transitionMatrix[toSubjectIndex, fromSubjectIdx] = toSubjectValue / rowCapacity
+			toSubjectValue = fromSubjectLikes.get(toSubject)
+			if toSubjectValue == None:
+				toSubjectValue = default
+			transitionMatrix[toSubjectIndex, fromSubjectIdx] = toSubjectValue / fromCapacity
 
 	eliminateDeadEndNodes(transitionMatrix, len(subjects))
 
@@ -83,26 +87,13 @@ def addTeleports(transitionMatrix, matWidthHeight):
 	telMatrix =  np.full((matWidthHeight, matWidthHeight), (1 - dumpingFactor) / matWidthHeight)
 	return transitionMatrix * dumpingFactor + telMatrix
 
-def getRowCapacity(totalLikes, fromSubject):
+def getFromCapacity(totalLikes, fromSubject, matWidthHeight, default):
 		fromSubjectLikes = totalLikes[fromSubject]
-		return sum(fromSubjectLikes.values())
-
-# rowLikeCapacity is a sum of all "likes" from a specific subject
-# it should be the same value for all subjects
-def getMaxRowLikeCapacity(totalLikes):
-	maxRowLikeCapacity = 0
-
-	for fromSubject in totalLikes.keys():
-		rowLikeCapacity = getRowCapacity(totalLikes, fromSubject)
-		if maxRowLikeCapacity == 0:
-			maxRowLikeCapacity = rowLikeCapacity
-		else:
-			if rowLikeCapacity != maxRowLikeCapacity:
-				print(f"Warning: row like capacity ({rowLikeCapacity}) < max row like capacity ({maxRowLikeCapacity}) for subject: {fromSubject}")
-				return -1				
-				
-	print(f"max row capacity is: {maxRowLikeCapacity}")
-	return maxRowLikeCapacity
+		likesCapacity = sum(fromSubjectLikes.values())
+		defaultCapacity = (matWidthHeight - len(fromSubjectLikes.values())) * default
+		fromCapacity = likesCapacity + defaultCapacity
+		print(f"From capacity of {fromSubject}: {likesCapacity} + {defaultCapacity} = {fromCapacity}")
+		return fromCapacity
 
 def eliminateDeadEndNodes(transitionMatrix, matWidthHeight):
 	v = 1 / matWidthHeight
