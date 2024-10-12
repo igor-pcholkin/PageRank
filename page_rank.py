@@ -3,11 +3,8 @@ import numpy.linalg as linalg
 
 class PageRank():
 
-	def __init__(self, min = 0, max = 0):
-		if min == 0 and max == 0:
-			self.default = 0
-		else:	
-			self.default = (max - min + 1) / 2
+	def __init__(self):
+		self.default = 0
 
 	totalLikes = {}
 	
@@ -27,6 +24,16 @@ class PageRank():
 
 	def createRating(self):
 		return createRating(self.totalLikes, self.default)
+
+class PageRank1to5(PageRank):
+	scoresToLikes = { 1: 0.01, 2: 0.02, 3: 1, 4: 3, 5: 5 }
+
+	def __init__(self):
+		self.default = self.scoresToLikes[3]
+
+	def add(self, fromS, to, score):
+		likes = self.scoresToLikes[score]
+		super().add(fromS, to, likes)
 
 def createRating(totalLikes, default = 0):
 	subjects = getSubjects(totalLikes)

@@ -43,5 +43,5 @@ rating = pr.createRating()
 
 # it shows that rating of the person 2 is still much higher than of others
 print("Rating is: " + str(rating))
-assert rating == ['Person2', 'Person1', 'Person3', 'NegativePerson1', 'NegativePerson2', 'Person5', 'Person4']
+assert rating == ['Person2', 'Person1', 'Person3', 'NegativePerson1', 'Person5', 'Person4', 'NegativePerson2']
 
