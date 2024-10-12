@@ -13,12 +13,21 @@ There are two ways (two APIs) to obtain a rating:
 ```
 createRating({ "A": aLikes, "B": bLikes, "C": cLikes })
 ```
-3. Using OOP Api, where "likes" can be added gradually:
-```pr = PageRank()
+2. Using OOP Api, where "likes" can be added gradually:
+```
+pr = PageRank()
 pr.add("A", "B", 4)
 pr.add("A", "C", 4)
 pr.add("B", "C", 8)
 pr.add("C", "A", 8)
+
+rating = pr.createRating()
+```
+3. A model where scores 1 to 5 are used instead of likes. This model allows to use negative "likes", where 1 and 2 produce negative effect to those to whom the likes are transferred. 3 has a neutral meaning, 4 and 5 have positive one.
+```
+pr = PageRank1to5()
+pr.add("A", "B", 5) # add positive score
+pr.add("A", "C", 1) # add negative score
 
 rating = pr.createRating()
 ```
