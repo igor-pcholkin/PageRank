@@ -102,7 +102,7 @@ def getFromCapacity(totalLikes, fromSubject, matWidthHeight, default):
 		likesCapacity = sum(fromSubjectLikes.values())
 		defaultCapacity = (matWidthHeight - len(fromSubjectLikes.values())) * default
 		fromCapacity = likesCapacity + defaultCapacity
-		print(f"From capacity of {fromSubject}: {likesCapacity} + {defaultCapacity} = {fromCapacity}")
+		#print(f"From capacity of {fromSubject}: {likesCapacity} + {defaultCapacity} = {fromCapacity}")
 		return fromCapacity
 
 def eliminateDeadEndNodes(transitionMatrix, matWidthHeight):

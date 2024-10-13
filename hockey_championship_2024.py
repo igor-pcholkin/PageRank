@@ -1,3 +1,6 @@
+# PageRank rating calculated based on how many goals were scored 
+# with this approach this example shows that PageRank rating of Austria turns out to be higher than official one
+
 from page_rank import PageRank
 
 pr = PageRank()

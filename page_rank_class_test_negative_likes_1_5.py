@@ -1,38 +1,37 @@
 from page_rank import PageRank1to5
 
 pr = PageRank1to5()
-# now 1 and 5 are not relative but absolute values,
-# when adding 1 like from one person to another 1 is treated as a "bad" score by itself
-# Persons who explicitly don't receive any likes receive a default value somewhere between 1 and 5. 
 
-pr.add("Person1", "Person2", 5)
-pr.add("Person2", "Person2", 5)
-pr.add("Person3", "Person2", 5)
-pr.add("Person4", "Person3", 5)
-pr.add("Person3", "Person1", 5)
-pr.add("Person5", "Person3", 5)
+pr.add("Adam", "Bob", 5)
+pr.add("Bob", "Bob", 5)
+pr.add("Declan", "Bob", 5)
+pr.add("Susan", "Declan", 5)
+pr.add("Declan", "Adam", 5)
+pr.add("Jerry", "Declan", 5)
 
 rating = pr.createRating()
 
 print("Rating is: " + str(rating))
-assert rating == ['Person2', 'Person3', 'Person1', 'Person5', 'Person4']
+assert rating == ['Bob', 'Declan', 'Adam', 'Susan', 'Jerry']
 
-# negative likes
-pr.add("Person4", "Person2", 1)
-pr.add("Person5", "Person2", 1)
-
-rating = pr.createRating()
-
-print("Rating is: " + str(rating))
-#assert rating == ['Person2', 'Person3', 'Person1', 'Person5', 'Person4']
-
-# negative likes
-pr.add("NegativePerson1", "Person2", 1)
-pr.add("NegativePerson2", "Person2", 1)
+# trying to undermine rating of Bob with negative scores
+pr.add("Susan", "Bob", 1)
+pr.add("Jerry", "Bob", 1)
 
 rating = pr.createRating()
 
 print("Rating is: " + str(rating))
-assert rating == ['Person2', 'Person3', 'Person1', 'NegativePerson1', 'NegativePerson2', 'Person5', 'Person4']
+assert rating == ['Bob', 'Declan', 'Adam', 'Susan', 'Jerry']
+
+# more trying to undermine rating of Bob with negative scores
+pr.add("Mark", "Bob", 1)
+pr.add("Irina", "Bob", 1)
+
+rating = pr.createRating()
+
+# This shows that Bob's rating can't be affected seriosly when negative scores are provided by non-authoritative people
+# see more details in console output
+print("Rating is: " + str(rating))
+assert rating[0:3] == ['Bob', 'Declan', 'Adam'] # other 4 should have equal rating but can show in changing order
 
 
