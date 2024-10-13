@@ -37,6 +37,9 @@ Check console outputs, ensure that eigen values are randomly distributed within 
 Otherwise more likely the rating will be calculated incorrectly with it.
 
 ## Examples
-```music_rating_*.py``` - example applications that calculate the ranking of music artists based on how often they have influenced other artists.
-```page_rank_class_test_negative_likes_1_5.py``` - shows how to calculate ratings where scores 1 to 5 are applied instead of number likes
-```hockey_championship_2024.py``` - shows how to interpret sports tournament results using model of likes 
+#### music_rating_*.py 
+example applications that calculate the ranking of music artists based on how often they have influenced other artists.
+#### page_rank_class_test_negative_likes_1_5.py 
+shows how to calculate ratings where scores 1 to 5 are applied instead of number likes
+#### hockey_championship_2024.py 
+shows how to interpret sports tournament results using model of likes 
