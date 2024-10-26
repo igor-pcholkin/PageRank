@@ -25,6 +25,11 @@ class PageRank():
 	def createRating(self):
 		return createRating(self.totalLikes, self.default)
 
+class PersonToProduct(PageRank):
+	def addAll1(self, fromPerson, toProducts):
+		for product in toProducts:
+			super().addAll1(product, toProducts)
+
 class PageRank1to5(PageRank):
 	scoresToLikes = { 1: 0.01, 2: 0.02, 3: 1, 4: 3, 5: 5 }
 
