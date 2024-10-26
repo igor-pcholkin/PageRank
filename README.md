@@ -1,6 +1,6 @@
 # PageRank
 
-This project enables creation of a ranking system for subjects based on their "likes" using the `PageRank` algorithm. The PageRank algorithm is traditionally used to rank web pages, where the most authoritative pages appear first. A web page is considered more authoritative or credible if it has many links pointing to it, especially from other credible pages.
+This project enables creation of a rating system for subjects based on their "likes" using the `PageRank` algorithm. The PageRank algorithm is traditionally used to rank web pages, where the most authoritative pages appear first. A web page is considered more authoritative or credible if it has many links pointing to it, especially from other credible pages.
 
 The same concept can be applied to various "subjects"—such as users, products, music artists, companies, etc.—which can be ranked based on how many "likes" they receive from other subjects, i.e., members of the same network.
 
@@ -54,6 +54,6 @@ example applications that calculate the ranking of music artists based on how of
 #### page_rank_class_test_negative_likes_1_5.py 
 shows how to calculate ratings where scores 1 to 5 are applied instead of number likes
 #### hockey_championship_2024.py 
-shows how to interpret sports tournament results using model of likes 
+shows how to interpret sports tournament results using model of likes creating rating of sport teams
 #### page_rank_person2product_test.py
-shows how to interpret product purchases as likes among products
+shows how to interpret product purchases as cross-reference likes among products creating rating of products
