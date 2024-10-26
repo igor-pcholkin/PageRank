@@ -7,7 +7,7 @@ The same concept can be applied to various "subjects"—such as users, products,
 `page_rank.py` contains the core algorithm (the `createRating()` function).
 
 ## API
-There are two ways (two APIs) to obtain a rating:
+There are several models (APIs) to obtain a rating:
 
 1. Using a single function call, e.g.
 ```
@@ -34,6 +34,16 @@ pr.add("A", "C", 1) # add negative score
 rating = pr.createRating()
 ```
 
+4. A model where purchases of products can be interpreted as likes.
+```
+pr = PersonToProduct()
+
+pr.addAll1("Harry", ["Icecream", "Pepsi", "Hamburger"])
+pr.addAll1("Mary", ["Icecream", "Cola"])
+
+rating = pr.createRating()
+```
+
 ## Notes
 Check console outputs, ensure that eigen values are randomly distributed within 0..1 interval, they should not be too low.
 Otherwise more likely the rating will be calculated incorrectly with it.
@@ -45,3 +55,5 @@ example applications that calculate the ranking of music artists based on how of
 shows how to calculate ratings where scores 1 to 5 are applied instead of number likes
 #### hockey_championship_2024.py 
 shows how to interpret sports tournament results using model of likes 
+#### page_rank_person2product_test.py
+shows how to interpret product purchases as likes among products
